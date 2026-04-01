@@ -252,6 +252,11 @@ export class PriceAxisWidget implements IDestroyable {
 			return 0;
 		}
 
+		const fixedWidth = this._priceScale.options().fixedWidth;
+		if (fixedWidth !== undefined && fixedWidth > 0) {
+			return fixedWidth;
+		}
+
 		let tickMarkMaxWidth = 0;
 		const rendererOptions = this.rendererOptions();
 
