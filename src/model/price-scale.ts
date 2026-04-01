@@ -195,6 +195,18 @@ export interface PriceScaleOptions {
 	minimumWidth: number;
 
 	/**
+	 * Define a fixed width for the price scale.
+	 * When set to a non-zero value, the price scale will always
+	 * use this exact width, ignoring the auto-calculated optimal width.
+	 *
+	 * This is useful for ensuring that multiple charts (e.g. a chart
+	 * with sub-charts) have identical price scale widths.
+	 *
+	 * @defaultValue 0
+	 */
+	fixedWidth: number;
+
+	/**
 	 * Ensures that tick marks are always visible at the very top and bottom of the price scale,
 	 * regardless of the data range. When enabled, a tick mark will be drawn at both edges of the scale,
 	 * providing clear boundary indicators.

@@ -15,6 +15,7 @@ export const priceScaleOptionsDefaults: PriceScaleOptions = {
 		top: 0.2,
 	},
 	minimumWidth: 0,
+	fixedWidth: 0,
 	ensureEdgeTickMarksVisible: false,
 	tickMarkDensity: 2.5,
 };
