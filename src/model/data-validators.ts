@@ -2,7 +2,7 @@
 
 import { assert } from '../helpers/assertions';
 
-import { isFulfilledData, OhlcData, SeriesDataItemTypeMap } from './data-consumer';
+import { CloudData, isFulfilledData, OhlcData, SeriesDataItemTypeMap } from './data-consumer';
 import { IHorzScaleBehavior } from './ihorz-scale-behavior';
 import { CreatePriceLineOptions } from './price-line-options';
 import { SeriesType } from './series-options';
@@ -55,6 +55,9 @@ export function getChecker<HorzScaleItem>(type: SeriesType): Checker<HorzScaleIt
 		case 'Histogram':
 			return checkLineItem.bind(null, type);
 
+		case 'Cloud':
+			return checkCloudItem.bind(null);
+
 		case 'Custom':
 			return checkCustomItem.bind(null);
 	}
@@ -104,6 +107,32 @@ function checkLineItem<HorzScaleItem>(
 		`${type} series item data value must be between ${MIN_SAFE_VALUE.toPrecision(16)} and ${MAX_SAFE_VALUE.toPrecision(16)}, got=${typeof lineItem.value}, value=${
 			lineItem.value
 		}`
+	);
+}
+
+function checkCloudItem<HorzScaleItem>(
+	cloudItem: SeriesDataItemTypeMap<HorzScaleItem>['Cloud']
+): void {
+	const item = cloudItem as Partial<CloudData>;
+	if (item.value1 === undefined) {
+		return;
+	}
+	assert(
+		typeof item.value1 === 'number',
+		`Cloud series item data value1 must be a number, got=${typeof item.value1}, value=${item.value1}`
+	);
+	assert(
+		isSafeValue(item.value1),
+		`Cloud series item data value1 must be between ${MIN_SAFE_VALUE.toPrecision(16)} and ${MAX_SAFE_VALUE.toPrecision(16)}, got=${item.value1}`
+	);
+	const val2 = item.value2;
+	assert(
+		typeof val2 === 'number',
+		`Cloud series item data value2 must be a number, got=${typeof val2}, value=${val2}`
+	);
+	assert(
+		isSafeValue(val2),
+		`Cloud series item data value2 must be between ${MIN_SAFE_VALUE.toPrecision(16)} and ${MAX_SAFE_VALUE.toPrecision(16)}, got=${val2}`
 	);
 }
 

@@ -8,6 +8,7 @@ import {
 	BarStyleOptions,
 	BaselineStyleOptions,
 	CandlestickStyleOptions,
+	CloudStyleOptions,
 	CustomStyleOptions,
 	HistogramStyleOptions,
 	LineStyleOptions,
@@ -64,6 +65,19 @@ export interface CandlesticksColorerStyle extends CommonBarColorerStyle {
 	barWickColor: string;
 }
 
+export interface CloudFillColorerStyle {
+	topColor: string;
+	bottomColor: string;
+}
+
+export interface CloudStrokeColorerStyle {
+	line1Color: string;
+	line2Color: string;
+}
+
+export interface CloudBarColorerStyle extends CommonBarColorerStyle, CloudFillColorerStyle, CloudStrokeColorerStyle {
+}
+
 export interface CustomBarColorerStyle extends CommonBarColorerStyle {}
 
 export interface BarStylesMap {
@@ -73,6 +87,7 @@ export interface BarStylesMap {
 	Baseline: BaselineBarColorerStyle;
 	Line: LineBarColorerStyle;
 	Histogram: HistogramBarColorerStyle;
+	Cloud: CloudBarColorerStyle;
 	Custom: CustomBarColorerStyle;
 }
 
@@ -172,6 +187,19 @@ const barStyleFnMap: BarStylesFnMap = {
 		const currentBar = ensureNotNull(findBar(barIndex, precomputedBars)) as SeriesPlotRow<'Histogram'>;
 		return {
 			barColor: currentBar.color ?? histogramStyle.color,
+		};
+	},
+	// eslint-disable-next-line @typescript-eslint/naming-convention
+	Cloud: (findBar: FindBarFn, cloudStyle: CloudStyleOptions, barIndex: TimePointIndex, precomputedBars?: PrecomputedBars): CloudBarColorerStyle => {
+		const currentBar = ensureNotNull(findBar(barIndex, precomputedBars)) as SeriesPlotRow<'Cloud'>;
+		const isBullish = ensure(currentBar.value[PlotRowValueIndex.Open]) >= ensure(currentBar.value[PlotRowValueIndex.Close]);
+
+		return {
+			barColor: isBullish ? (currentBar.line1Color ?? cloudStyle.line1Color) : (currentBar.line2Color ?? cloudStyle.line2Color),
+			topColor: currentBar.topColor ?? cloudStyle.topColor,
+			bottomColor: currentBar.bottomColor ?? cloudStyle.bottomColor,
+			line1Color: currentBar.line1Color ?? cloudStyle.line1Color,
+			line2Color: currentBar.line2Color ?? cloudStyle.line2Color,
 		};
 	},
 };

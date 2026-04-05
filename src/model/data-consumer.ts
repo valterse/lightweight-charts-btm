@@ -124,6 +124,42 @@ export interface BaselineData<HorzScaleItem = Time> extends SingleValueData<Horz
 }
 
 /**
+ * Structure describing a single item of data for cloud series.
+ * Each data point defines two values that form the boundaries of the cloud.
+ */
+export interface CloudData<HorzScaleItem = Time> extends WhitespaceData<HorzScaleItem> {
+	/**
+	 * The first boundary value (e.g. Senkou Span A).
+	 */
+	value1: number;
+
+	/**
+	 * The second boundary value (e.g. Senkou Span B).
+	 */
+	value2: number;
+
+	/**
+	 * Optional fill color when value1 is greater than or equal to value2. If missed, color from options is used.
+	 */
+	topColor?: string;
+
+	/**
+	 * Optional fill color when value1 is less than value2. If missed, color from options is used.
+	 */
+	bottomColor?: string;
+
+	/**
+	 * Optional color for the value1 line. If missed, color from options is used.
+	 */
+	line1Color?: string;
+
+	/**
+	 * Optional color for the value2 line. If missed, color from options is used.
+	 */
+	line2Color?: string;
+}
+
+/**
  * Represents a bar with a {@link Time} and open, high, low, and close prices.
  */
 export interface OhlcData<HorzScaleItem = Time> extends WhitespaceData<HorzScaleItem> {
@@ -179,7 +215,7 @@ export interface CandlestickData<HorzScaleItem = Time> extends OhlcData<HorzScal
 }
 
 export function isWhitespaceData<HorzScaleItem = Time>(data: SeriesDataItemTypeMap<HorzScaleItem>[SeriesType]): data is WhitespaceData<HorzScaleItem> {
-	return (data as Partial<BarData<HorzScaleItem>>).open === undefined && (data as Partial<LineData<HorzScaleItem>>).value === undefined;
+	return (data as Partial<BarData<HorzScaleItem>>).open === undefined && (data as Partial<LineData<HorzScaleItem>>).value === undefined && (data as Partial<CloudData<HorzScaleItem>>).value1 === undefined;
 }
 
 export function isFulfilledData<HorzScaleItem, T extends SeriesDataItemTypeMap<HorzScaleItem>[SeriesType]>(
@@ -230,6 +266,10 @@ export interface SeriesDataItemTypeMap<HorzScaleItem = Time> {
 	 * The types of histogram series data.
 	 */
 	Histogram: HistogramData<HorzScaleItem> | WhitespaceData<HorzScaleItem>;
+	/**
+	 * The types of cloud series data.
+	 */
+	Cloud: CloudData<HorzScaleItem> | WhitespaceData<HorzScaleItem>;
 	/**
 	 * The base types of an custom series data.
 	 */

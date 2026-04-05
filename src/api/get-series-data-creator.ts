@@ -3,6 +3,7 @@ import {
 	BarData,
 	BaselineData,
 	CandlestickData,
+	CloudData,
 	LineData,
 	OhlcData,
 	SeriesDataItemTypeMap,
@@ -15,6 +16,7 @@ import {
 	BarPlotRow,
 	BaselinePlotRow,
 	CandlestickPlotRow,
+	CloudPlotRow,
 	CustomPlotRow,
 	LinePlotRow,
 	SeriesPlotRow,
@@ -145,9 +147,34 @@ export function getSeriesDataCreator<TSeriesType extends SeriesType, HorzScaleIt
 		Histogram: lineData<HorzScaleItem>,
 		Bar: barData<HorzScaleItem>,
 		Candlestick: candlestickData<HorzScaleItem>,
+		Cloud: cloudData<HorzScaleItem>,
 		Custom: customData<HorzScaleItem>,
 	};
 	return seriesPlotRowToDataMap[seriesType];
+}
+
+function cloudData<HorzScaleItem>(plotRow: CloudPlotRow): CloudData<HorzScaleItem> {
+	const data: CloudData<HorzScaleItem> = {
+		value1: plotRow.value[PlotRowValueIndex.Open],
+		value2: plotRow.value[PlotRowValueIndex.Close],
+		time: plotRow.originalTime as HorzScaleItem,
+	};
+	if (plotRow.customValues !== undefined) {
+		data.customValues = plotRow.customValues;
+	}
+	if (plotRow.topColor !== undefined) {
+		data.topColor = plotRow.topColor;
+	}
+	if (plotRow.bottomColor !== undefined) {
+		data.bottomColor = plotRow.bottomColor;
+	}
+	if (plotRow.line1Color !== undefined) {
+		data.line1Color = plotRow.line1Color;
+	}
+	if (plotRow.line2Color !== undefined) {
+		data.line2Color = plotRow.line2Color;
+	}
+	return data;
 }
 
 function customData<HorzScaleItem>(plotRow: CustomPlotRow): CustomData<HorzScaleItem> {

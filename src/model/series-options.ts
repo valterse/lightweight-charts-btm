@@ -526,6 +526,108 @@ export interface HistogramStyleOptions {
 }
 
 /**
+ * Represents style options for a cloud series.
+ *
+ * A cloud series renders a filled polygon between two data arrays (`value1` and `value2`),
+ * useful for visualizing Ichimoku clouds, Bollinger Bands, or any two-line filled region.
+ */
+export interface CloudStyleOptions {
+	/**
+	 * Fill color used when value1 is greater than or equal to value2 (bullish region).
+	 *
+	 * @defaultValue `'rgba(76, 175, 80, 0.3)'`
+	 */
+	topColor: string;
+
+	/**
+	 * Fill color used when value1 is less than value2 (bearish region).
+	 *
+	 * @defaultValue `'rgba(255, 82, 82, 0.3)'`
+	 */
+	bottomColor: string;
+
+	/**
+	 * Color of the value1 line.
+	 *
+	 * @defaultValue `'rgba(76, 175, 80, 1)'`
+	 */
+	line1Color: string;
+
+	/**
+	 * Color of the value2 line.
+	 *
+	 * @defaultValue `'rgba(255, 82, 82, 1)'`
+	 */
+	line2Color: string;
+
+	/**
+	 * Line width in pixels.
+	 *
+	 * @defaultValue `1`
+	 */
+	lineWidth: LineWidth;
+
+	/**
+	 * Line style.
+	 *
+	 * @defaultValue {@link LineStyle.Solid}
+	 */
+	lineStyle: LineStyle;
+
+	/**
+	 * Line type.
+	 *
+	 * @defaultValue {@link LineType.Simple}
+	 */
+	lineType: LineType;
+
+	/**
+	 * Show the cloud boundary lines.
+	 *
+	 * @defaultValue `true`
+	 */
+	lineVisible: boolean;
+
+	/**
+	 * Show the crosshair marker.
+	 *
+	 * @defaultValue `true`
+	 */
+	crosshairMarkerVisible: boolean;
+	/**
+	 * Crosshair marker radius in pixels.
+	 *
+	 * @defaultValue `4`
+	 */
+	crosshairMarkerRadius: number;
+	/**
+	 * Crosshair marker border color. An empty string falls back to the color of the series under the crosshair.
+	 *
+	 * @defaultValue `''`
+	 */
+	crosshairMarkerBorderColor: string;
+	/**
+	 * The crosshair marker background color. An empty string falls back to the color of the series under the crosshair.
+	 *
+	 * @defaultValue `''`
+	 */
+	crosshairMarkerBackgroundColor: string;
+	/**
+	 * Crosshair marker border width in pixels.
+	 *
+	 * @defaultValue `2`
+	 */
+	crosshairMarkerBorderWidth: number;
+
+	/**
+	 * Last price animation mode.
+	 *
+	 * @defaultValue {@link LastPriceAnimationMode.Disabled}
+	 */
+	lastPriceAnimation: LastPriceAnimationMode;
+}
+
+/**
  * Represents style options for a custom series.
  */
 export interface CustomStyleOptions {
@@ -919,6 +1021,15 @@ export type HistogramSeriesOptions = SeriesOptions<HistogramStyleOptions>;
 export type HistogramSeriesPartialOptions = SeriesPartialOptions<HistogramStyleOptions>;
 
 /**
+ * Represents cloud series options.
+ */
+export type CloudSeriesOptions = SeriesOptions<CloudStyleOptions>;
+/**
+ * Represents cloud series options where all properties are optional.
+ */
+export type CloudSeriesPartialOptions = SeriesPartialOptions<CloudStyleOptions>;
+
+/**
  * Represents a custom series options.
  */
 export type CustomSeriesOptions = SeriesOptions<CustomStyleOptions>;
@@ -967,6 +1078,10 @@ export interface SeriesStyleOptionsMap {
 	 */
 	Histogram: HistogramStyleOptions;
 	/**
+	 * The type of cloud style options.
+	 */
+	Cloud: CloudStyleOptions;
+	/**
 	 * The type of a custom series' style options.
 	 */
 	Custom: CustomStyleOptions;
@@ -1003,6 +1118,10 @@ export interface SeriesOptionsMap {
 	 */
 	Histogram: HistogramSeriesOptions;
 	/**
+	 * The type of cloud series options.
+	 */
+	Cloud: CloudSeriesOptions;
+	/**
 	 * The type of a custom series options.
 	 */
 	Custom: CustomSeriesOptions;
@@ -1038,6 +1157,10 @@ export interface SeriesPartialOptionsMap {
 	 * The type of histogram series partial options.
 	 */
 	Histogram: HistogramSeriesPartialOptions;
+	/**
+	 * The type of cloud series partial options.
+	 */
+	Cloud: CloudSeriesPartialOptions;
 	/**
 	 * The type of a custom series partial options.
 	 */
